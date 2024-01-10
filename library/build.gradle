@@ -1,0 +1,78 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+// flutter 3.3.10
+def engineVersion = "1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a"
+
+android {
+    namespace 'io.flutter.embedding.compat'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 19
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        profile {
+            initWith debug
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        configureEach {
+            addFlutterDependencies(it, engineVersion)
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+void addFlutterDependencies(buildType, engineVersion) {
+    String flutterBuildMode = buildModeFor(buildType)
+    // The embedding is set as an API dependency in a Flutter plugin.
+    // Therefore, don't make the app project depend on the embedding if there are Flutter
+    // plugins.
+    // This prevents duplicated classes when using custom build types. That is, a custom build
+    // type like profile is used, and the plugin and app projects have API dependencies on the
+    // embedding.
+    addApiDependencies(project, buildType.name, "io.flutter:flutter_embedding_$flutterBuildMode:$engineVersion")
+}
+
+
+private static void addApiDependencies(Project project, String variantName, Object dependency, Closure config = null) {
+    String configuration;
+    configuration = "${variantName}CompileOnly";
+    project.dependencies.add(configuration, dependency, config)
+}
+
+private static String buildModeFor(buildType) {
+    if (buildType.name == "profile") {
+        return "profile"
+    } else if (buildType.debuggable) {
+        return "debug"
+    }
+    return "release"
+}
