@@ -3,7 +3,16 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
-// flutter 3.3.10
+// flutter 3.3.10 -> 1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_debug-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_profile-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.pom
+// Download
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a-sources.jar
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/armeabi_v7a_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/armeabi_v7a_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/arm64_v8a_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/arm64_v8a_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/x86_64_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/x86_64_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
 def engineVersion = "1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a"
 
 android {
