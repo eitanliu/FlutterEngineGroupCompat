@@ -2,17 +2,42 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
-
+// flutter 2.8.1 -> 1.0.0-890a5fca2e34db413be624fc83aeea8e61d42ce6
+// gradle distributions/gradle-6.7-all.zip
+// agp com.android.tools.build:gradle:4.1.0
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-890a5fca2e34db413be624fc83aeea8e61d42ce6/flutter_embedding_debug-1.0.0-890a5fca2e34db413be624fc83aeea8e61d42ce6.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-890a5fca2e34db413be624fc83aeea8e61d42ce6/flutter_embedding_profile-1.0.0-890a5fca2e34db413be624fc83aeea8e61d42ce6.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-890a5fca2e34db413be624fc83aeea8e61d42ce6/flutter_embedding_release-1.0.0-890a5fca2e34db413be624fc83aeea8e61d42ce6.pom
+// flutter 2.10.5 -> 1.0.0-57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab
+// gradle distributions/gradle-6.7-all.zip
+// agp com.android.tools.build:gradle:4.1.0
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab/flutter_embedding_debug-1.0.0-57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab/flutter_embedding_profile-1.0.0-57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab/flutter_embedding_release-1.0.0-57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab.pom
 // flutter 3.3.10 -> 1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a
+// gradle distributions/gradle-7.4-all.zip
+// agp com.android.tools.build:gradle:7.1.2 kotlin 1.6.10
 // https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_debug-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.pom
 // https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_profile-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.pom
 // https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.pom
-// Download
-// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
-// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a-sources.jar
-// https://storage.flutter-io.cn/download.flutter.io/io/flutter/armeabi_v7a_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/armeabi_v7a_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
-// https://storage.flutter-io.cn/download.flutter.io/io/flutter/arm64_v8a_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/arm64_v8a_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
-// https://storage.flutter-io.cn/download.flutter.io/io/flutter/x86_64_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/x86_64_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
+// flutter 3.7.12 -> 1.0.0-1a65d409c7a1438a34d21b60bf30a6fd5db59314
+// gradle distributions/gradle-7.5-all.zip
+// agp com.android.tools.build:gradle:7.2.0 kotlin 1.7.10
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-1a65d409c7a1438a34d21b60bf30a6fd5db59314/flutter_embedding_debug-1.0.0-1a65d409c7a1438a34d21b60bf30a6fd5db59314.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-1a65d409c7a1438a34d21b60bf30a6fd5db59314/flutter_embedding_profile-1.0.0-1a65d409c7a1438a34d21b60bf30a6fd5db59314.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-1a65d409c7a1438a34d21b60bf30a6fd5db59314/flutter_embedding_release-1.0.0-1a65d409c7a1438a34d21b60bf30a6fd5db59314.pom
+// flutter 3.10.6 -> 1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d
+// gradle distributions/gradle-7.5-all.zip
+// agp com.android.tools.build:gradle:7.3.0 kotlin 1.7.10
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d/flutter_embedding_debug-1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d/flutter_embedding_profile-1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d/flutter_embedding_release-1.0.0-cdbeda788a293fa29665dc3fa3d6e63bd221cb0d.pom
+// flutter 3.13.9 -> 1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad
+// gradle distributions/gradle-7.5-all.zip
+// agp com.android.tools.build:gradle:7.3.0 kotlin 1.7.10
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad/flutter_embedding_debug-1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad/flutter_embedding_profile-1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad/flutter_embedding_release-1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad.pom
 def engineVersion = "1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a"
 
 android {
@@ -59,6 +84,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
 
+// Download flutter 3.3.10
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/flutter_embedding_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a-sources.jar
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/armeabi_v7a_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/armeabi_v7a_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/arm64_v8a_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/arm64_v8a_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/x86_64_release/1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a/x86_64_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar
 void addFlutterDependencies(buildType, engineVersion) {
     String flutterBuildMode = buildModeFor(buildType)
     // The embedding is set as an API dependency in a Flutter plugin.
