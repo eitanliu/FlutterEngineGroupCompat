@@ -44,6 +44,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.11.0'
 
     implementation project(':library')
+    // debugImplementation('com.example.untitled:flutter:1.0.0:debug@aar') { transitive = true }
+    // profileImplementation('com.example.untitled:flutter:1.0.0:profile@aar') { transitive = true }
+    // releaseImplementation('com.example.untitled:flutter:1.0.0:release@aar') { transitive = true }
+    debugImplementation 'com.example.untitled30310:flutter_debug:1.0'
+    profileImplementation 'com.example.untitled30310:flutter_profile:1.0'
+    releaseImplementation 'com.example.untitled30310:flutter_release:1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
