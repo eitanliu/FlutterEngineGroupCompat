@@ -3,6 +3,7 @@ package io.flutter.embedding.android;
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigs.DEFAULT_INITIAL_ROUTE;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import io.flutter.FlutterInjector;
 import io.flutter.Log;
@@ -205,6 +207,20 @@ class FlutterActivityAndFragmentDelegateCompat extends FlutterActivityAndFragmen
     }
 
     interface HostCompat {
+
+        // since 3.3.10
+        @Nullable
+        String getDartEntrypointLibraryUri();
+
+        // since 3.3.10
+        @Nullable
+        List<String> getDartEntrypointArgs();
+
+        // since 3.3.10
+        ExclusiveAppComponent<Activity> getExclusiveAppComponent();
+
+        // since 3.3.10
+        boolean shouldDispatchAppLifecycleState();
 
         // since 3.10.6
         @Nullable

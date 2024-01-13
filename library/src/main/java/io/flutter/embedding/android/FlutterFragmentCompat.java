@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.FlutterEngineGroupCacheCompat;
@@ -20,6 +21,14 @@ import io.flutter.embedding.engine.FlutterEngineGroupCacheCompat;
 public class FlutterFragmentCompat extends FlutterFragment
         implements FlutterActivityAndFragmentDelegateCompat.Host {
     protected static final String ARG_CACHED_ENGINE_GROUP_ID = "cached_engine_group_id";
+    /**
+     * The Dart entrypoint method's URI that is executed upon initialization.
+     */
+    protected static final String ARG_DART_ENTRYPOINT_URI = "dart_entrypoint_uri";
+    /**
+     * The Dart entrypoint arguments that is executed upon initialization.
+     */
+    protected static final String ARG_DART_ENTRYPOINT_ARGS = "dart_entrypoint_args";
 
     /**
      * Returns a {@link NewEngineInGroupFragmentBuilder} to create a {@code FlutterFragmentCompat} with a
@@ -291,6 +300,15 @@ public class FlutterFragmentCompat extends FlutterFragment
         return groupId;
     }
 
+    /**
+     * Returns the Android App Component exclusively attached to {@link
+     * io.flutter.embedding.engine.FlutterEngine}.
+     */
+    @Override
+    public ExclusiveAppComponent<Activity> getExclusiveAppComponent() {
+        return delegate;
+    }
+
     @SuppressLint({"MissingSuperCall", "VisibleForTests"})
     @Override
     public void onAttach(@NonNull Context context) {
@@ -325,4 +343,45 @@ public class FlutterFragmentCompat extends FlutterFragment
         }
         return null;
     }
+
+    /**
+     * The Dart entrypoint arguments will be passed as a list of string to Dart's entrypoint function.
+     *
+     * <p>A value of null means do not pass any arguments to Dart's entrypoint function.
+     *
+     * <p>Subclasses may override this method to directly control the Dart entrypoint arguments.
+     */
+    @Override
+    @Nullable
+    public List<String> getDartEntrypointArgs() {
+        return getArguments().getStringArrayList(ARG_DART_ENTRYPOINT_ARGS);
+    }
+
+    /**
+     * Returns the library URI of the Dart method that this {@code FlutterFragment} should execute to
+     * start a Flutter app.
+     *
+     * <p>Defaults to null (example value: "package:foo/bar.dart").
+     *
+     * <p>Used by this {@code FlutterFragment}'s {@link FlutterActivityAndFragmentDelegate.Host}
+     */
+    @Override
+    @Nullable
+    public String getDartEntrypointLibraryUri() {
+        return getArguments().getString(ARG_DART_ENTRYPOINT_URI);
+    }
+
+    /**
+     * Give the host application a chance to take control of the app lifecycle events.
+     *
+     * <p>Return {@code false} means the host application dispatches these app lifecycle events, while
+     * return {@code true} means the engine dispatches these events.
+     *
+     * <p>Defaults to {@code true}.
+     */
+    @Override
+    public boolean shouldDispatchAppLifecycleState() {
+        return true;
+    }
+
 }
