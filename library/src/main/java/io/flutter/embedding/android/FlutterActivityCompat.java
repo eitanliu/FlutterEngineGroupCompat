@@ -15,6 +15,7 @@ import static io.flutter.embedding.android.FlutterActivityLaunchConfigs.NORMAL_T
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigs.SPLASH_SCREEN_META_DATA_KEY;
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigsCompat.DART_ENTRYPOINT_URI_META_DATA_KEY;
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigsCompat.EXTRA_CACHED_ENGINE_GROUP_ID;
+import static io.flutter.embedding.android.FlutterActivityLaunchConfigsCompat.EXTRA_DART_ENTRYPOINT;
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigsCompat.EXTRA_DART_ENTRYPOINT_ARGS;
 
 import android.app.Activity;
@@ -148,7 +149,8 @@ import java.util.List;
  *
  * <pre>{@code
  * // Create and pre-warm a FlutterEngine.
- * FlutterEngine flutterEngine = new FlutterEngine(context);
+ * FlutterEngineGroup group = new FlutterEngineGroup(context);
+ * FlutterEngine flutterEngine = group.createAndRunDefaultEngine(context);
  * flutterEngine.getDartExecutor().executeDartEntrypoint(DartEntrypoint.createDefault());
  *
  * // Cache the pre-warmed FlutterEngine in the FlutterEngineCache.
@@ -280,7 +282,7 @@ public class FlutterActivityCompat extends Activity
         }
 
         /**
-         * The initial route that a Flutter app will render in this {@link FlutterFragment}, defaults to
+         * The initial route that a Flutter app will render in this {@link FlutterActivityCompat}, defaults to
          * "/".
          *
          * @param initialRoute The route.
@@ -454,17 +456,17 @@ public class FlutterActivityCompat extends Activity
 
     /**
      * Creates a {@link NewEngineInGroupIntentBuilder}, which can be used to configure an {@link
-     * Intent} to launch a {@code FlutterActivity} by internally creating a FlutterEngine from an
+     * Intent} to launch a {@code FlutterActivityCompat} by internally creating a FlutterEngine from an
      * existing {@link io.flutter.embedding.engine.FlutterEngineGroup} cached in a specified {@link
-     * io.flutter.embedding.engine.FlutterEngineGroupCacheCompat}.
+     * io.flutter.embedding.engine.FlutterEngineGroupCache}.
      *
      * <pre>{@code
      * // Create a FlutterEngineGroup, such as in the onCreate method of the Application.
      * FlutterEngineGroup engineGroup = new FlutterEngineGroup(this);
      * FlutterEngineGroupCache.getInstance().put("my_cached_engine_group_id", engineGroup);
      *
-     * // Start a FlutterActivity with the FlutterEngineGroup by creating an intent with withNewEngineInGroup
-     * Intent intent = FlutterActivity.withNewEngineInGroup("my_cached_engine_group_id")
+     * // Start a FlutterActivityCompat with the FlutterEngineGroup by creating an intent with withNewEngineInGroup
+     * Intent intent = FlutterActivityCompat.withNewEngineInGroup("my_cached_engine_group_id")
      *     .dartEntrypoint("custom_entrypoint")
      *     .initialRoute("/custom/route")
      *     .backgroundMode(BackgroundMode.transparent)
@@ -476,15 +478,15 @@ public class FlutterActivityCompat extends Activity
      * @return The builder.
      */
     public static NewEngineInGroupIntentBuilder withNewEngineInGroup(@NonNull String engineGroupId) {
-        return new NewEngineInGroupIntentBuilder(FlutterActivity.class, engineGroupId);
+        return new NewEngineInGroupIntentBuilder(FlutterActivityCompat.class, engineGroupId);
     }
 
     /**
-     * Builder to create an {@code Intent} that launches a {@code FlutterActivity} with a new {@link
+     * Builder to create an {@code Intent} that launches a {@code FlutterActivityCompat} with a new {@link
      * FlutterEngine} created by FlutterEngineGroup#createAndRunEngine.
      */
     public static class NewEngineInGroupIntentBuilder {
-        private final Class<? extends FlutterActivity> activityClass;
+        private final Class<? extends FlutterActivityCompat> activityClass;
         private final String cachedEngineGroupId;
         private String dartEntrypoint = DEFAULT_DART_ENTRYPOINT;
         private String initialRoute = DEFAULT_INITIAL_ROUTE;
@@ -492,13 +494,13 @@ public class FlutterActivityCompat extends Activity
 
         /**
          * Constructor that allows this {@code NewEngineInGroupIntentBuilder} to be used by subclasses
-         * of {@code FlutterActivity}.
+         * of {@code FlutterActivityCompat}.
          *
-         * <p>Subclasses of {@code FlutterActivity} should provide their own static version of {@link
+         * <p>Subclasses of {@code FlutterActivityCompat} should provide their own static version of {@link
          * #withNewEngineInGroup}, which returns an instance of {@code NewEngineInGroupIntentBuilder}
-         * constructed with a {@code Class} reference to the {@code FlutterActivity} subclass, e.g.:
+         * constructed with a {@code Class} reference to the {@code FlutterActivityCompat} subclass, e.g.:
          *
-         * <p>{@code return new NewEngineInGroupIntentBuilder(MyFlutterActivity.class,
+         * <p>{@code return new NewEngineInGroupIntentBuilder(MyFlutterActivityCompat.class,
          * cacheedEngineGroupId); }
          *
          * <pre>{@code
@@ -506,10 +508,10 @@ public class FlutterActivityCompat extends Activity
          * FlutterEngineGroup engineGroup = new FlutterEngineGroup(this);
          * FlutterEngineGroupCache.getInstance().put("my_cached_engine_group_id", engineGroup);
          *
-         * // Create a NewEngineInGroupIntentBuilder that would build an intent to start my custom FlutterActivity subclass.
-         * FlutterActivity.NewEngineInGroupIntentBuilder intentBuilder =
-         *     new FlutterActivity.NewEngineInGroupIntentBuilder(
-         *           MyFlutterActivity.class,
+         * // Create a NewEngineInGroupIntentBuilder that would build an intent to start my custom FlutterActivityCompat subclass.
+         * FlutterActivityCompat.NewEngineInGroupIntentBuilder intentBuilder =
+         *     new FlutterActivityCompat.NewEngineInGroupIntentBuilder(
+         *           MyFlutterActivityCompat.class,
          *           app.engineGroupId);
          * intentBuilder.dartEntrypoint("main")
          *     .initialRoute("/custom/route")
@@ -517,11 +519,11 @@ public class FlutterActivityCompat extends Activity
          * startActivity(intentBuilder.build(context));
          * }</pre>
          *
-         * @param activityClass A subclass of {@code FlutterActivity}.
+         * @param activityClass A subclass of {@code FlutterActivityCompat}.
          * @param engineGroupId The engine group id.
          */
         public NewEngineInGroupIntentBuilder(
-                @NonNull Class<? extends FlutterActivity> activityClass, @NonNull String engineGroupId) {
+                @NonNull Class<? extends FlutterActivityCompat> activityClass, @NonNull String engineGroupId) {
             this.activityClass = activityClass;
             this.cachedEngineGroupId = engineGroupId;
         }
@@ -540,7 +542,7 @@ public class FlutterActivityCompat extends Activity
         }
 
         /**
-         * The initial route that a Flutter app will render in this {@link FlutterActivity}, defaults to
+         * The initial route that a Flutter app will render in this {@link FlutterActivityCompat}, defaults to
          * "/".
          *
          * @param initialRoute The route.
@@ -553,18 +555,18 @@ public class FlutterActivityCompat extends Activity
         }
 
         /**
-         * The mode of {@code FlutterActivity}'s background, either {@link BackgroundMode#opaque} or
+         * The mode of {@code FlutterActivityCompat}'s background, either {@link BackgroundMode#opaque} or
          * {@link BackgroundMode#transparent}.
          *
          * <p>The default background mode is {@link BackgroundMode#opaque}.
          *
          * <p>Choosing a background mode of {@link BackgroundMode#transparent} will configure the inner
-         * {@link FlutterView} of this {@code FlutterActivity} to be configured with a {@link
+         * {@link FlutterView} of this {@code FlutterActivityCompat} to be configured with a {@link
          * FlutterTextureView} to support transparency. This choice has a non-trivial performance
          * impact. A transparent background should only be used if it is necessary for the app design
          * being implemented.
          *
-         * <p>A {@code FlutterActivity} that is configured with a background mode of {@link
+         * <p>A {@code FlutterActivityCompat} that is configured with a background mode of {@link
          * BackgroundMode#transparent} must have a theme applied to it that includes the following
          * property: {@code <item name="android:windowIsTranslucent">true</item>}.
          *
@@ -578,7 +580,7 @@ public class FlutterActivityCompat extends Activity
         }
 
         /**
-         * Creates and returns an {@link Intent} that will launch a {@code FlutterActivity} with the
+         * Creates and returns an {@link Intent} that will launch a {@code FlutterActivityCompat} with the
          * desired configuration.
          *
          * @param context The context. e.g. An Activity.
@@ -587,9 +589,9 @@ public class FlutterActivityCompat extends Activity
         @NonNull
         public Intent build(@NonNull Context context) {
             return new Intent(context, activityClass)
-                    .putExtra(FlutterActivityLaunchConfigsCompat.EXTRA_DART_ENTRYPOINT, dartEntrypoint)
+                    .putExtra(EXTRA_DART_ENTRYPOINT, dartEntrypoint)
                     .putExtra(EXTRA_INITIAL_ROUTE, initialRoute)
-                    .putExtra(FlutterActivityLaunchConfigsCompat.EXTRA_CACHED_ENGINE_GROUP_ID, cachedEngineGroupId)
+                    .putExtra(EXTRA_CACHED_ENGINE_GROUP_ID, cachedEngineGroupId)
                     .putExtra(EXTRA_BACKGROUND_MODE, backgroundMode)
                     .putExtra(EXTRA_DESTROY_ENGINE_WITH_ACTIVITY, true);
         }
@@ -1015,8 +1017,13 @@ public class FlutterActivityCompat extends Activity
         return getIntent().getStringExtra(EXTRA_CACHED_ENGINE_ID);
     }
 
-    @Nullable
+    /**
+     * Returns the ID of a statically cached {@link io.flutter.embedding.engine.FlutterEngineGroup} to
+     * use within this {@code FlutterActivityCompat}, or {@code null} if this {@code FlutterActivityCompat} does
+     * not want to use a cached {@link io.flutter.embedding.engine.FlutterEngineGroup}.
+     */
     @Override
+    @Nullable
     public String getCachedEngineGroupId() {
         String groupId = getIntent().getStringExtra(EXTRA_CACHED_ENGINE_GROUP_ID);
         if (groupId == null || groupId.isEmpty()) {
@@ -1051,14 +1058,26 @@ public class FlutterActivityCompat extends Activity
     /**
      * The Dart entrypoint that will be executed as soon as the Dart snapshot is loaded.
      *
-     * <p>This preference can be controlled by setting a {@code <meta-data>} called {@link
-     * FlutterActivityLaunchConfigs#DART_ENTRYPOINT_META_DATA_KEY} within the Android manifest
-     * definition for this {@code FlutterActivityCompat}.
+     * <p>This preference can be controlled with 2 methods:
+     *
+     * <ol>
+     *   <li>Pass a boolean as {@link FlutterActivityLaunchConfigs#EXTRA_DART_ENTRYPOINT} with the
+     *       launching {@code Intent}, or
+     *   <li>Set a {@code <meta-data>} called {@link
+     *       FlutterActivityLaunchConfigs#DART_ENTRYPOINT_META_DATA_KEY} within the Android manifest
+     *       definition for this {@code FlutterActivityCompat}
+     * </ol>
+     * <p>
+     * If both preferences are set, the {@code Intent} preference takes priority.
      *
      * <p>Subclasses may override this method to directly control the Dart entrypoint.
      */
     @NonNull
     public String getDartEntrypointFunctionName() {
+        if (getIntent().hasExtra(EXTRA_DART_ENTRYPOINT)) {
+            return getIntent().getStringExtra(EXTRA_DART_ENTRYPOINT);
+        }
+
         try {
             Bundle metaData = getMetaData();
             String desiredDartEntrypoint =
