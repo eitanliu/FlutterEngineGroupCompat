@@ -38,7 +38,7 @@ plugins {
 // https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad/flutter_embedding_debug-1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad.pom
 // https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad/flutter_embedding_profile-1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad.pom
 // https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad/flutter_embedding_release-1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad.pom
-def engineVersion = "1.0.0-890a5fca2e34db413be624fc83aeea8e61d42ce6"
+def engineVersion = "1.0.0-57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab"
 
 android {
     namespace 'io.flutter.embedding.compat'
