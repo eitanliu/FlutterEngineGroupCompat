@@ -51,9 +51,11 @@ import io.flutter.embedding.engine.FlutterEngineGroupCacheCompat;
 import io.flutter.embedding.engine.FlutterShellArgs;
 import io.flutter.embedding.engine.plugins.activity.ActivityControlSurface;
 import io.flutter.embedding.engine.plugins.util.GeneratedPluginRegister;
+import io.flutter.embedding.utils.InvokeUtils;
 import io.flutter.plugin.platform.PlatformPlugin;
 import io.flutter.util.ViewUtils;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -218,6 +220,8 @@ public class FlutterActivityCompat extends Activity
         FlutterActivityAndFragmentDelegateCompat.Host,
         LifecycleOwner {
     private static final String TAG = "FlutterActivityCompat";
+
+    private boolean hasRegisteredBackCallback = false;
 
     /**
      * The ID of the {@code FlutterView} created by this activity.
@@ -648,7 +652,10 @@ public class FlutterActivityCompat extends Activity
 
         lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_CREATE);
 
-        registerOnBackInvokedCallback();
+        Method[] methods = PlatformPlugin.PlatformPluginDelegate.class.getMethods();
+        if (!InvokeUtils.hasMethod(methods, "setFrameworkHandlesBack")) {
+            registerOnBackInvokedCallback();
+        }
 
         configureWindowForTransparency();
 
@@ -673,6 +680,7 @@ public class FlutterActivityCompat extends Activity
             getOnBackInvokedDispatcher()
                     .registerOnBackInvokedCallback(
                             OnBackInvokedDispatcher.PRIORITY_DEFAULT, onBackInvokedCallback);
+            hasRegisteredBackCallback = true;
         }
     }
 
@@ -686,6 +694,7 @@ public class FlutterActivityCompat extends Activity
     public void unregisterOnBackInvokedCallback() {
         if (Build.VERSION.SDK_INT >= 33) {
             getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(onBackInvokedCallback);
+            hasRegisteredBackCallback = false;
         }
     }
 
@@ -702,6 +711,15 @@ public class FlutterActivityCompat extends Activity
                 }
             }
                     : null;
+
+    @Override
+    public void setFrameworkHandlesBack(boolean frameworkHandlesBack) {
+        if (frameworkHandlesBack && !hasRegisteredBackCallback) {
+            registerOnBackInvokedCallback();
+        } else if (!frameworkHandlesBack && hasRegisteredBackCallback) {
+            unregisterOnBackInvokedCallback();
+        }
+    }
 
     /**
      * Switches themes for this {@code Activity} from the theme used to launch this {@code Activity}
@@ -951,6 +969,14 @@ public class FlutterActivityCompat extends Activity
     public void onUserLeaveHint() {
         if (stillAttachedForEvent("onUserLeaveHint")) {
             delegate.onUserLeaveHint();
+        }
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (stillAttachedForEvent("onWindowFocusChanged")) {
+            InvokeUtils.tryCall(() -> delegate.onWindowFocusChanged(hasFocus));
         }
     }
 
