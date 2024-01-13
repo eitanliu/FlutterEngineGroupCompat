@@ -1,15 +1,16 @@
-// Copyright 2013 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 package io.flutter.embedding.engine;
+
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+
+import io.flutter.embedding.engine.dart.DartExecutor;
 
 /**
  * Static singleton cache that holds {@link io.flutter.embedding.engine.FlutterEngineGroup}
@@ -23,10 +24,12 @@ import java.util.Map;
  * internally when instructed to use a cached {@link io.flutter.embedding.engine.FlutterEngineGroup}
  * based on a given ID. See {@link
  * io.flutter.embedding.android.FlutterActivityCompat.NewEngineInGroupIntentBuilder} and {@link
- * io.flutter.embedding.android.FlutterFragmentCompat#withNewEngineInGroup(String)} for related APIs.
+ * io.flutter.embedding.android.FlutterFragmentCompat.NewEngineInGroupFragmentBuilder} for related APIs.
  */
 public class FlutterEngineGroupCacheCompat {
     private static volatile FlutterEngineGroupCacheCompat instance;
+    private static volatile boolean firstReflectSdkCacheClass = true;
+    private static Class<?> sdkCacheClass;
 
     /**
      * Returns the static singleton instance of {@code FlutterEngineGroupCache}.
@@ -43,6 +46,22 @@ public class FlutterEngineGroupCacheCompat {
             }
         }
         return instance;
+    }
+
+    @Nullable
+    public static Class<?> getSdkGroupCacheClass() {
+        if (firstReflectSdkCacheClass) {
+            synchronized (FlutterEngineGroupCacheCompat.class) {
+                if (firstReflectSdkCacheClass) {
+                    try {
+                        sdkCacheClass = Class.forName("io.flutter.embedding.engine.FlutterEngineGroupCache");
+                        firstReflectSdkCacheClass = false;
+                    } catch (Throwable ignored) {
+                    }
+                }
+            }
+        }
+        return sdkCacheClass;
     }
 
     private final Map<String, FlutterEngineGroup> cachedEngineGroups = new HashMap<>();
@@ -98,5 +117,57 @@ public class FlutterEngineGroupCacheCompat {
      */
     public void clear() {
         cachedEngineGroups.clear();
+    }
+
+    public static class Global {
+        // global group, init isolate
+        public final static String GROUP_NAME = "global";
+        static final String DEFAULT_INITIAL_ROUTE = "_init";
+
+
+        private static volatile Global instance;
+
+        private final FlutterEngineGroup group;
+
+        /**
+         * Returns the static singleton instance of {@code FlutterEngineGroupCache}.
+         *
+         * <p>Creates a new instance if one does not yet exist.
+         */
+        @NonNull
+        public static Global getInstance(Context context) {
+            if (instance == null) {
+                synchronized (Global.class) {
+                    if (instance == null) {
+                        instance = new Global(context);
+                    }
+                }
+            }
+            return instance;
+        }
+
+        public Global(Context context) {
+            Context application = context.getApplicationContext();
+            group = new FlutterEngineGroup(application);
+            group.createAndRunEngine(application, DartExecutor.DartEntrypoint.createDefault(), DEFAULT_INITIAL_ROUTE);
+            FlutterEngineGroupCacheCompat.getInstance().put(GROUP_NAME, group);
+            pubFlutterEngineGroup();
+        }
+
+        void pubFlutterEngineGroup() {
+            try {
+                Class<?> clazz = getSdkGroupCacheClass();
+                Method instanceMethod = clazz.getMethod("getInstance");
+                Object instance = instanceMethod.invoke(null);
+                Method putMethod = instance.getClass().getMethod("put", String.class, FlutterEngineGroup.class);
+                putMethod.invoke(instance, GROUP_NAME, group);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+
+        public FlutterEngineGroup getGroup() {
+            return group;
+        }
     }
 }
