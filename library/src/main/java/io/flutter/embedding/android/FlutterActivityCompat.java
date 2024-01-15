@@ -12,7 +12,6 @@ import static io.flutter.embedding.android.FlutterActivityLaunchConfigs.EXTRA_IN
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigs.HANDLE_DEEPLINKING_META_DATA_KEY;
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigs.INITIAL_ROUTE_META_DATA_KEY;
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigs.NORMAL_THEME_META_DATA_KEY;
-import static io.flutter.embedding.android.FlutterActivityLaunchConfigs.SPLASH_SCREEN_META_DATA_KEY;
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigsCompat.DART_ENTRYPOINT_URI_META_DATA_KEY;
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigsCompat.EXTRA_CACHED_ENGINE_GROUP_ID;
 import static io.flutter.embedding.android.FlutterActivityLaunchConfigsCompat.EXTRA_DART_ENTRYPOINT;
@@ -24,10 +23,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -39,7 +36,6 @@ import android.window.OnBackInvokedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
@@ -71,7 +67,6 @@ import java.util.List;
  *
  * <ul>
  *   <li>Displays an Android launch screen.
- *   <li>Displays a Flutter splash screen.
  *   <li>Configures the status bar appearance.
  *   <li>Chooses the Dart execution app bundle path, entrypoint and entrypoint arguments.
  *   <li>Chooses Flutter's initial route.
@@ -169,7 +164,7 @@ import java.util.List;
  * FlutterView}. Using a {@link FlutterView} requires forwarding some calls from an {@code
  * Activity}, as well as forwarding lifecycle calls from an {@code Activity} or a {@code Fragment}.
  *
- * <p><strong>Launch Screen and Splash Screen</strong>
+ * <p><strong>Launch Screen</strong>
  *
  * <p>{@code FlutterActivityCompat} supports the display of an Android "launch screen", which is displayed
  * while the Android application loads. It is only applicable if {@code FlutterActivityCompat} is the
@@ -203,10 +198,6 @@ import java.util.List;
  * <p>With themes defined, and AndroidManifest.xml updated, Flutter displays the specified launch
  * screen until the Android application is initialized.
  *
- * <p>Flutter also requires initialization time. To specify a splash screen for Flutter
- * initialization, subclass {@code FlutterActivityCompat} and override {@link #provideSplashScreen()}. See
- * {@link SplashScreen} for details on implementing a splash screen.
- *
  * <p><strong>Alternative Activity</strong> {@link FlutterFragmentActivity} is also available, which
  * is similar to {@code FlutterActivityCompat} but it extends {@code FragmentActivity}. You should use
  * {@code FlutterActivityCompat}, if possible, but if you need a {@code FragmentActivity} then you should
@@ -216,9 +207,7 @@ import java.util.List;
 // methods are duplicated for readability purposes. Be sure to replicate any change in this class in
 // FlutterFragmentActivity, too.
 public class FlutterActivityCompat extends Activity
-        implements FlutterActivityAndFragmentDelegate.Host,
-        FlutterActivityAndFragmentDelegateCompat.Host,
-        LifecycleOwner {
+        implements FlutterActivityAndFragmentDelegateCompat.Host, LifecycleOwner {
     private static final String TAG = "FlutterActivityCompat";
 
     private boolean hasRegisteredBackCallback = false;
@@ -765,41 +754,6 @@ public class FlutterActivityCompat extends Activity
             Log.e(
                     TAG,
                     "Could not read meta-data for FlutterActivityCompat. Using the launch theme as normal theme.");
-        }
-    }
-
-    @Nullable
-    @Override
-    public SplashScreen provideSplashScreen() {
-        Drawable manifestSplashDrawable = getSplashScreenFromManifest();
-        if (manifestSplashDrawable != null) {
-            return new DrawableSplashScreen(manifestSplashDrawable);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Returns a {@link Drawable} to be used as a splash screen as requested by meta-data in the
-     * {@code AndroidManifest.xml} file, or null if no such splash screen is requested.
-     *
-     * <p>See {@link FlutterActivityLaunchConfigs#SPLASH_SCREEN_META_DATA_KEY} for the meta-data key
-     * to be used in a manifest file.
-     */
-    @Nullable
-    private Drawable getSplashScreenFromManifest() {
-        try {
-            Bundle metaData = getMetaData();
-            int splashScreenId = metaData != null ? metaData.getInt(SPLASH_SCREEN_META_DATA_KEY) : 0;
-            return splashScreenId != 0
-                    ? ResourcesCompat.getDrawable(getResources(), splashScreenId, getTheme())
-                    : null;
-        } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Splash screen not found. Ensure the drawable exists and that it's valid.");
-            throw e;
-        } catch (PackageManager.NameNotFoundException e) {
-            // This is never expected to happen.
-            return null;
         }
     }
 
@@ -1464,6 +1418,19 @@ public class FlutterActivityCompat extends Activity
      */
     @Override
     public boolean shouldDispatchAppLifecycleState() {
+        return true;
+    }
+
+    /**
+     * Whether to automatically attach the {@link FlutterView} to the engine.
+     *
+     * <p>Returning {@code false} means that the task of attaching the {@link FlutterView} to the
+     * engine will be taken over by the host application.
+     *
+     * <p>Defaults to {@code true}.
+     */
+    @Override
+    public boolean attachToEngineAutomatically() {
         return true;
     }
 

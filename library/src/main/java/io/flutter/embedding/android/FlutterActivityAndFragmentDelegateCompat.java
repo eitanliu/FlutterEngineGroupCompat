@@ -41,19 +41,19 @@ class FlutterActivityAndFragmentDelegateCompat extends FlutterActivityAndFragmen
 
     @SuppressLint("VisibleForTests")
     @Override
-    void setupFlutterEngine() {
+    void setUpFlutterEngine() {
         if (FlutterEngineGroupCacheCompat.Global.GROUP_NAME.equals(host.getCachedEngineGroupId())) {
             FlutterEngineGroupCacheCompat.Global.getInstance(host.getContext());
         }
 
         if (FlutterEngineGroupCacheCompat.getSdkGroupCacheClass() != null) {
-            super.setupFlutterEngine();
+            super.setUpFlutterEngine();
         } else {
             try {
                 setupFlutterEngineCompat();
             } catch (Throwable e) {
                 e.printStackTrace();
-                super.setupFlutterEngine();
+                super.setUpFlutterEngine();
             }
         }
     }

@@ -38,7 +38,13 @@ plugins {
 // https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad/flutter_embedding_debug-1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad.pom
 // https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad/flutter_embedding_profile-1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad.pom
 // https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad/flutter_embedding_release-1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad.pom
-def engineVersion = "1.0.0-0545f8705df301877d787107bac1a6e9fc9ee1ad"
+// flutter 3.16.7 -> 1.0.0-4a585b79294e830fa89c24924d58a27cc8fbf406
+// gradle distributions/gradle-7.5-all.zip
+// agp com.android.tools.build:gradle:7.3.0 kotlin 1.7.10
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_debug/1.0.0-4a585b79294e830fa89c24924d58a27cc8fbf406/flutter_embedding_debug-1.0.0-4a585b79294e830fa89c24924d58a27cc8fbf406.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_profile/1.0.0-4a585b79294e830fa89c24924d58a27cc8fbf406/flutter_embedding_profile-1.0.0-4a585b79294e830fa89c24924d58a27cc8fbf406.pom
+// https://storage.flutter-io.cn/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-4a585b79294e830fa89c24924d58a27cc8fbf406/flutter_embedding_release-1.0.0-4a585b79294e830fa89c24924d58a27cc8fbf406.pom
+def engineVersion = "1.0.0-4a585b79294e830fa89c24924d58a27cc8fbf406"
 
 android {
     namespace 'io.flutter.embedding.compat'
